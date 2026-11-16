@@ -1,4 +1,4 @@
-# Power BI Dashboard
+# Food Surplus Hunger Analytics
 
 ## Overview
 This project presents an interactive Power BI dashboard developed to analyze key metrics and trends using structured datasets.
