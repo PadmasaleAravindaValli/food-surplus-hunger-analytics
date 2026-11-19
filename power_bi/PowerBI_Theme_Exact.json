@@ -1,0 +1,76 @@
+{
+  "name": "FoodWastageVsHungerTheme",
+  "dataColors": [
+    "#543884",
+    "#0078D4",
+    "#D85826",
+    "#4B0082",
+    "#9C27B0",
+    "#E91E63",
+    "#E6AF2E",
+    "#008080",
+    "#2E7D32",
+    "#29B6F6",
+    "#E63946",
+    "#4361EE"
+  ],
+  "background": "#F4F5F7",
+  "foreground": "#1E293B",
+  "tableAccent": "#543884",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "show": true,
+            "fontColor": { "solid": { "color": "#111827" } },
+            "fontSize": 14,
+            "fontFamily": "Segoe UI Semibold",
+            "alignment": "center"
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 10
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#CBD5E1" } },
+            "radius": 12
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#000000" } },
+            "position": "Outer",
+            "preset": "BottomRight"
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [
+          {
+            "color": { "solid": { "color": "#543884" } },
+            "fontSize": 32,
+            "fontFamily": "Segoe UI Bold"
+          }
+        ],
+        "categoryLabels": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#111827" } },
+            "fontSize": 12,
+            "fontFamily": "Segoe UI Semibold"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "name": "Model",
+  "compatibilityLevel": 1550,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "FoodHungerData",
+        "columns": [
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country"
+          },
+          {
+            "name": "Total Waste (Tons)",
+            "dataType": "int64",
+            "sourceColumn": "Total Waste (Tons)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Waste Per Capita (Kg)",
+            "dataType": "double",
+            "sourceColumn": "Waste Per Capita (Kg)",
+            "formatString": "#,0.0"
+          },
+          {
+            "name": "Economic Loss (Million $)",
+            "dataType": "double",
+            "sourceColumn": "Economic Loss (Million $)",
+            "formatString": "$#,0.00"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "Global Hunger Index",
+            "dataType": "double",
+            "sourceColumn": "Global Hunger Index",
+            "formatString": "0.0"
+          },
+          {
+            "name": "Index Category",
+            "dataType": "string",
+            "sourceColumn": "Index Category"
+          },
+          {
+            "name": "Hunger-to-Waste Ratio",
+            "dataType": "double",
+            "sourceColumn": "Hunger-to-Waste Ratio",
+            "formatString": "0.000"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FoodHungerData-Partition",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let\n    Source = Csv.Document(File.Contents(\"C:/Users/aru12/OneDrive/Desktop/powerbi MIne/data/cleaned_merged_food_hunger_dataset.csv\"),[Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),\n    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),\n    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"Country\", type text}, {\"Total Waste (Tons)\", Int64.Type}, {\"Waste Per Capita (Kg)\", type number}, {\"Economic Loss (Million $)\", type number}, {\"Year\", Int64.Type}, {\"Global Hunger Index\", type number}, {\"Index Category\", type text}, {\"Hunger-to-Waste Ratio\", type number}})\nin\n    #\"Changed Type\""
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Economic Loss ($M)",
+            "expression": "SUM(FoodHungerData[Economic Loss (Million $)])",
+            "formatString": "$#,0.00\\M"
+          },
+          {
+            "name": "Selected Country Loss ($M)",
+            "expression": "CALCULATE(SUM(FoodHungerData[Economic Loss (Million $)]), FoodHungerData[Country] = \"Italy\")",
+            "formatString": "$#,0.00\\M"
+          },
+          {
+            "name": "Avg Hunger Index",
+            "expression": "AVERAGE(FoodHungerData[Global Hunger Index])",
+            "formatString": "0.0"
+          },
+          {
+            "name": "Sum of Total Waste (Millions)",
+            "expression": "DIVIDE(SUM(FoodHungerData[Total Waste (Tons)]), 1000000, 0)",
+            "formatString": "#,0.00\\M"
+          },
+          {
+            "name": "Hunger to Waste Ratio",
+            "expression": "DIVIDE([Avg Hunger Index], [Sum of Total Waste (Millions)], 0)",
+            "formatString": "0.00"
+          }
+        ]
+      }
+    ]
+  }
+}

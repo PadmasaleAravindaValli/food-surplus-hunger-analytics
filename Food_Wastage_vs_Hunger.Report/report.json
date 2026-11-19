@@ -1,0 +1,118 @@
+{
+  "id": 0,
+  "theme": "CustomTheme",
+  "resourcePackages": [],
+  "sections": [
+    {
+      "id": 0,
+      "name": "ReportSection_Page1",
+      "displayName": "Overview & Donut",
+      "filters": "[]",
+      "ordinal": 0,
+      "width": 1280,
+      "height": 720,
+      "config": "{\"objects\": {\"background\": [{\"properties\": {\"color\": {\"solid\": {\"color\": \"#F4F5F7\"}}, \"transparency\": {\"expr\": {\"Literal\": {\"Value\": \"0D\"}}}}}]}}",
+      "visualContainers": [
+        {
+          "x": 40,
+          "y": 30,
+          "z": 1000,
+          "width": 560,
+          "height": 310,
+          "config": "{\"name\": \"visual_hunger_top10\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 40, \"y\": 30, \"z\": 1000, \"width\": 560, \"height\": 310}}], \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"FoodHungerData.Country\"}], \"Y\": [{\"queryRef\": \"FoodHungerData.Avg Hunger Index\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top 10 Countries By Hunger Index'\"}}}}}], \"dataPoint\": [{\"properties\": {\"fill\": {\"solid\": {\"color\": \"#543884\"}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}",
+          "query": "{\"Commands\": [{\"SemanticQueryDataShapeCommand\": {\"Query\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"FoodHungerData\"}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Country\"}, \"Name\": \"FoodHungerData.Country\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Avg Hunger Index\"}, \"Name\": \"FoodHungerData.Avg Hunger Index\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Avg Hunger Index\"}}}]}}}]}"
+        },
+        {
+          "x": 640,
+          "y": 30,
+          "z": 1001,
+          "width": 580,
+          "height": 180,
+          "config": "{\"name\": \"visual_kpi_selected\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 640, \"y\": 30, \"z\": 1001, \"width\": 580, \"height\": 180}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"FoodHungerData.Selected Country Loss ($M)\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Total Economic Loss(Million $)'\"}}}}}], \"labels\": [{\"properties\": {\"color\": {\"solid\": {\"color\": \"#543884\"}}, \"fontSize\": {\"expr\": {\"Literal\": {\"Value\": \"34D\"}}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}",
+          "query": "{\"Commands\": [{\"SemanticQueryDataShapeCommand\": {\"Query\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"FoodHungerData\"}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Selected Country Loss ($M)\"}, \"Name\": \"FoodHungerData.Selected Country Loss ($M)\"}]}}}]}"
+        },
+        {
+          "x": 40,
+          "y": 370,
+          "z": 1002,
+          "width": 560,
+          "height": 310,
+          "config": "{\"name\": \"visual_kpi_total\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 40, \"y\": 370, \"z\": 1002, \"width\": 560, \"height\": 310}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"FoodHungerData.Total Economic Loss ($M)\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Total Economic Loss(Million $)'\"}}}}}], \"labels\": [{\"properties\": {\"color\": {\"solid\": {\"color\": \"#543884\"}}, \"fontSize\": {\"expr\": {\"Literal\": {\"Value\": \"42D\"}}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}",
+          "query": "{\"Commands\": [{\"SemanticQueryDataShapeCommand\": {\"Query\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"FoodHungerData\"}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total Economic Loss ($M)\"}, \"Name\": \"FoodHungerData.Total Economic Loss ($M)\"}]}}}]}"
+        },
+        {
+          "x": 640,
+          "y": 240,
+          "z": 1003,
+          "width": 580,
+          "height": 440,
+          "config": "{\"name\": \"visual_donut_waste\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 640, \"y\": 240, \"z\": 1003, \"width\": 580, \"height\": 440}}], \"singleVisual\": {\"visualType\": \"donutChart\", \"projections\": {\"Category\": [{\"queryRef\": \"FoodHungerData.Country\"}], \"Y\": [{\"queryRef\": \"FoodHungerData.Sum of Total Waste (Millions)\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Total Waste by Country'\"}}}}}], \"labels\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"labelStyle\": {\"expr\": {\"Literal\": {\"Value\": \"'Both'\"}}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}",
+          "query": "{\"Commands\": [{\"SemanticQueryDataShapeCommand\": {\"Query\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"FoodHungerData\"}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Country\"}, \"Name\": \"FoodHungerData.Country\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Sum of Total Waste (Millions)\"}, \"Name\": \"FoodHungerData.Sum of Total Waste (Millions)\"}]}}}]}"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "ReportSection_Page2",
+      "displayName": "Map Visualization",
+      "filters": "[]",
+      "ordinal": 1,
+      "width": 1280,
+      "height": 720,
+      "visualContainers": [
+        {
+          "x": 40,
+          "y": 30,
+          "z": 2000,
+          "width": 1200,
+          "height": 650,
+          "config": "{\"name\": \"visual_map\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 40, \"y\": 30, \"z\": 2000, \"width\": 1200, \"height\": 650}}], \"singleVisual\": {\"visualType\": \"map\", \"projections\": {\"Category\": [{\"queryRef\": \"FoodHungerData.Country\"}], \"Size\": [{\"queryRef\": \"FoodHungerData.Total Waste (Tons)\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Map Visualization over Countries'\"}}}}}], \"mapStyles\": [{\"properties\": {\"theme\": {\"expr\": {\"Literal\": {\"Value\": \"'Aerial'\"}}}}}], \"dataPoint\": [{\"properties\": {\"defaultColor\": {\"solid\": {\"color\": \"#0078D4\"}}}}]}}}",
+          "query": "{\"Commands\": [{\"SemanticQueryDataShapeCommand\": {\"Query\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"FoodHungerData\"}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Country\"}, \"Name\": \"FoodHungerData.Country\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total Waste (Tons)\"}, \"Name\": \"FoodHungerData.Total Waste (Tons)\"}]}}}]}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ReportSection_Page3",
+      "displayName": "Trends & Scatter",
+      "filters": "[]",
+      "ordinal": 2,
+      "width": 1280,
+      "height": 720,
+      "visualContainers": [
+        {
+          "x": 40,
+          "y": 15,
+          "z": 3000,
+          "width": 1200,
+          "height": 55,
+          "config": "{\"name\": \"visual_header_banner\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 40, \"y\": 15, \"z\": 3000, \"width\": 1200, \"height\": 55}}], \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"FOOD WASTAGE Vs HUNGER INDEX\", \"textStyle\": {\"fontFamily\": \"Segoe UI Bold\", \"fontSize\": \"18pt\", \"color\": \"#FFFFFF\"}}], \"horizontalTextAlignment\": \"center\"}]}}], \"background\": [{\"properties\": {\"color\": {\"solid\": {\"color\": \"#1E293B\"}}}}]}}}"
+        },
+        {
+          "x": 40,
+          "y": 85,
+          "z": 3001,
+          "width": 580,
+          "height": 290,
+          "config": "{\"name\": \"visual_trend_line\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 40, \"y\": 85, \"z\": 3001, \"width\": 580, \"height\": 290}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"FoodHungerData.Year\"}], \"Y\": [{\"queryRef\": \"FoodHungerData.Sum of Total Waste (Millions)\"}, {\"queryRef\": \"FoodHungerData.Avg Hunger Index\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Trend Line Over Years'\"}}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 85,
+          "z": 3002,
+          "width": 590,
+          "height": 290,
+          "config": "{\"name\": \"visual_waste_bar\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 650, \"y\": 85, \"z\": 3002, \"width\": 590, \"height\": 290}}], \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"FoodHungerData.Country\"}], \"Y\": [{\"queryRef\": \"FoodHungerData.Sum of Total Waste (Millions)\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top 10 Countries By Food Waste'\"}}}}}], \"dataPoint\": [{\"properties\": {\"fill\": {\"solid\": {\"color\": \"#4361EE\"}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}"
+        },
+        {
+          "x": 40,
+          "y": 395,
+          "z": 3003,
+          "width": 1200,
+          "height": 300,
+          "config": "{\"name\": \"visual_scatter_plot\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 40, \"y\": 395, \"z\": 3003, \"width\": 1200, \"height\": 300}}], \"singleVisual\": {\"visualType\": \"scatterChart\", \"projections\": {\"Details\": [{\"queryRef\": \"FoodHungerData.Country\"}], \"X\": [{\"queryRef\": \"FoodHungerData.Waste Per Capita (Kg)\"}], \"Y\": [{\"queryRef\": \"FoodHungerData.Avg Hunger Index\"}]}, \"objects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Food Waste Vs Hunger'\"}}}}}], \"dataPoint\": [{\"properties\": {\"fill\": {\"solid\": {\"color\": \"#E63946\"}}}}, {\"properties\": {\"markerSize\": {\"expr\": {\"Literal\": {\"Value\": \"8D\"}}}}}], \"border\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"color\": {\"solid\": {\"color\": \"#CBD5E1\"}}, \"radius\": {\"expr\": {\"Literal\": {\"Value\": \"10D\"}}}}}]}}}"
+        }
+      ]
+    }
+  ]
+}

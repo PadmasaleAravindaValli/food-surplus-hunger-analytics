@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Wastage vs Hunger Index Dashboard | Dayananda Sagar University</title>
+    <!-- Modern Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js & Leaflet (CDN with graceful offline handling) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        :root {
+            --dsu-purple: #543884;
+            --dsu-purple-dark: #3b255e;
+            --dsu-purple-light: #7b5bb4;
+            --dsu-blue: #0078D4;
+            --dsu-navy: #1E293B;
+            --dsu-red: #E63946;
+            --dsu-gold: #E6AF2E;
+            --dsu-bg: #F8FAFC;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: #E2E8F0;
+            --card-radius: 14px;
+            --shadow-sm: 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 16px 40px rgba(84, 56, 132, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f1f3f8;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top University Header */
+        .uni-header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #31104b 50%, #543884 100%);
+            color: #ffffff;
+            padding: 18px 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 3px solid #e6af2e;
+        }
+
+        .uni-title-box {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .uni-seal {
+            width: 58px;
+            height: 58px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border: 2px solid #e6af2e;
+            font-size: 26px;
+            color: #543884;
+            font-weight: 800;
+        }
+
+        .uni-titles h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        .uni-titles h2 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .team-badge {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        .team-badge strong {
+            color: #facc15;
+        }
+
+        /* Mode Switcher Nav (Power BI vs Tableau) */
+        .nav-bar {
+            background: #ffffff;
+            padding: 12px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .platform-tabs {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .platform-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .platform-btn.active {
+            background: #ffffff;
+            color: var(--dsu-purple);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .platform-btn i {
+            font-size: 1rem;
+        }
+
+        .page-subnav {
+            display: flex;
+            gap: 6px;
+        }
+
+        .subnav-btn {
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.15s;
+        }
+
+        .subnav-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .subnav-btn.active {
+            background: var(--dsu-purple);
+            color: #ffffff;
+            border-color: var(--dsu-purple);
+        }
+
+        /* Main Content Container */
+        .main-container {
+            flex: 1;
+            padding: 24px 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Power BI Themed Canvas Wrapper */
+        .pbi-canvas-1 {
+            background: linear-gradient(135deg, #fdfbf7 0%, #f7f3ed 50%, #ede8f5 100%);
+            position: relative;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid #e5e0d8;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        /* Background soft decorative graphics */
+        .pbi-canvas-1::before {
+            content: "";
+            position: absolute;
+            top: 10%;
+            right: 5%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(249, 115, 22, 0.04) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .pbi-canvas-1::after {
+            content: "";
+            position: absolute;
+            bottom: 5%;
+            left: 20%;
+            width: 500px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.06) 0%, rgba(236, 72, 153, 0.04) 60%, transparent 80%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 1100px) {
+            .grid-2x2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            border-radius: var(--card-radius);
+            padding: 22px 26px;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .dashboard-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: center;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        /* KPI Card Styles */
+        .kpi-card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .kpi-big-value {
+            font-size: 3.6rem;
+            font-weight: 800;
+            color: var(--dsu-purple);
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin: 12px 0;
+            text-shadow: 0 2px 10px rgba(84, 56, 132, 0.15);
+        }
+
+        .kpi-subtext {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* Power BI Page 3 Header Banner */
+        .pbi-banner {
+            background: linear-gradient(90deg, #1e293b 0%, #2b3a67 50%, #1e293b 100%);
+            border-radius: 12px;
+            padding: 14px 20px;
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            border: 1px solid #334155;
+        }
+
+        .pbi-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* Leaflet & Map Containers */
+        .map-box {
+            height: 580px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        /* Legend styling */
+        .chart-legend-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 14px;
+            font-size: 0.78rem;
+        }
+
+        .legend-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .legend-chip span.dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Tableau Style Shell */
+        .tableau-shell {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .tableau-titlebar {
+            background: #e2e8f0;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #cbd5e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .tableau-controls {
+            background: #f8fafc;
+            padding: 8px 16px;
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.78rem;
+            color: #64748b;
+        }
+
+        /* Table styles */
+        .data-table-container {
+            overflow-x: auto;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table.styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        table.styled-table thead tr {
+            background-color: var(--dsu-purple);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        table.styled-table th, table.styled-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        table.styled-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .badge-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-serious {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-moderate {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-low {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 24px 32px;
+            font-size: 0.82rem;
+            text-align: center;
+            margin-top: 40px;
+            border-top: 1px solid #1e293b;
+        }
+
+        footer a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dayananda Sagar University Header -->
+    <header class="uni-header">
+        <div class="uni-title-box">
+            <div class="uni-seal">DSU</div>
+            <div class="uni-titles">
+                <h1>Dayananda Sagar University</h1>
+                <h2>School of Engineering &bull; Department of CSE (Data Science) &bull; 2025–26</h2>
+            </div>
+        </div>
+        <div class="team-badge">
+            <strong>SEC Project Work</strong><br>
+            Aravinda Valli (ENG23DS0077) &bull; Vaishnavi T P (ENG23DS0089)<br>
+            Varshini B (ENG23DS0090) &bull; Yamini Pujar (ENG23DS0093)<br>
+            <span style="color: #94a3b8; font-size: 0.75rem;">Supervised by: Prof. Shashank Shekhar &bull; Prof. Manjula M</span>
+        </div>
+    </header>
+
+    <!-- Navigation & Platform Switcher -->
+    <nav class="nav-bar">
+        <div class="platform-tabs">
+            <button class="platform-btn active" onclick="switchPlatform('pbi')">
+                <i class="fa-solid fa-chart-column" style="color: #e6af2e;"></i> Power BI Dashboards
+            </button>
+            <button class="platform-btn" onclick="switchPlatform('tableau')">
+                <i class="fa-solid fa-square-poll-vertical" style="color: #0284c7;"></i> Tableau Dashboards
+            </button>
+            <button class="platform-btn" onclick="switchPlatform('data')">
+                <i class="fa-solid fa-table"></i> Cleaned Datasets
+            </button>
+            <button class="platform-btn" onclick="switchPlatform('insights')">
+                <i class="fa-solid fa-lightbulb" style="color: #eab308;"></i> Key Insights & Findings
+            </button>
+        </div>
+
+        <div class="page-subnav" id="pbi-subnav">
+            <button class="subnav-btn active" onclick="switchPbiPage(1)">Page 1: Overview & Donut</button>
+            <button class="subnav-btn" onclick="switchPbiPage(2)">Page 2: Satellite Map</button>
+            <button class="subnav-btn" onclick="switchPbiPage(3)">Page 3: Trends & Scatter</button>
+        </div>
+
+        <div class="page-subnav" id="tableau-subnav" style="display: none;">
+            <button class="subnav-btn active" onclick="switchTableauPage(1)">Dashboard 1: Breakdown & Bullet</button>
+            <button class="subnav-btn" onclick="switchTableauPage(2)">Dashboard 2: Hunger Index Patterns</button>
+            <button class="subnav-btn" onclick="switchTableauPage(3)">Dashboard 3: World Choropleth Map</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+
+        <!-- ========================================================================= -->
+        <!-- POWER BI VIEW -->
+        <!-- ========================================================================= -->
+        <div id="pbi-view" class="view-section active">
+
+            <!-- PAGE 1: OVERVIEW & DONUT -->
+            <div id="pbi-page-1" class="pbi-canvas-1">
+                <div class="grid-2x2">
+                    <!-- Top Left: Top 10 Countries by Hunger Index -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title">Top 10 Countries By Hunger Index</h3>
+                        <div style="height: 320px; width: 100%;">
+                            <canvas id="pbiHungerBarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Top Right: KPI 1 (Selected Economic Loss) -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title">Total Economic Loss(Million $)</h3>
+                        <div class="kpi-card-content">
+                            <div class="kpi-big-value" id="kpi-selected-loss">1.37M</div>
+                            <div class="kpi-subtext">Selected Country / Key Subset Loss</div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Left: KPI 2 (Total Economic Loss) -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title">Total Economic Loss(Million $)</h3>
+                        <div class="kpi-card-content">
+                            <div class="kpi-big-value" style="font-size: 4.2rem;">17.80M</div>
+                            <div class="kpi-subtext">Cumulative Global Economic Wastage Value</div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Right: Donut Chart Total Waste by Country -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title">Total Waste by Country</h3>
+                        <div style="height: 340px; width: 100%; position: relative;">
+                            <canvas id="pbiDonutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: MAP VISUALIZATION OVER COUNTRIES -->
+            <div id="pbi-page-2" style="display: none;">
+                <div class="dashboard-card" style="padding: 20px;">
+                    <h2 class="card-title" style="font-size: 1.4rem;">Map Visualization over Countries</h2>
+                    <p style="text-align: center; color: #64748b; font-size: 0.88rem; margin-bottom: 14px;">
+                        Bubble sizes represent total food waste (tons). Notice heavy wastage concentration across North America and Europe.
+                    </p>
+                    <div id="pbiMap" class="map-box"></div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: TRENDS, BAR & SCATTER -->
+            <div id="pbi-page-3" style="display: none;">
+                <!-- Header Banner -->
+                <div class="pbi-banner">
+                    <h2>FOOD WASTAGE Vs HUNGER INDEX</h2>
+                </div>
+
+                <div class="grid-2x2" style="margin-bottom: 24px;">
+                    <!-- Trend Line Over Years -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title">Trend Line Over Years</h3>
+                        <div style="height: 300px; width: 100%;">
+                            <canvas id="pbiTrendLineChart"></canvas>
+                        </div>
+                        <div class="chart-legend-box">
+                            <div class="legend-chip">
+                                <span class="dot" style="background: #E63946;"></span>
+                                <span>Sum of Sum of Total Waste (Millions)</span>
+                            </div>
+                            <div class="legend-chip">
+                                <span class="dot" style="background: #1E3A8A;"></span>
+                                <span>Avg Hunger Index</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top 10 Countries by Food Waste -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title">Top 10 Countries By Food Waste</h3>
+                        <div style="height: 300px; width: 100%;">
+                            <canvas id="pbiWasteBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scatter Plot: Food Waste Vs Hunger -->
+                <div class="dashboard-card">
+                    <h3 class="card-title">Food Waste Vs Hunger</h3>
+                    <div style="height: 340px; width: 100%;">
+                        <canvas id="pbiScatterChart"></canvas>
+                    </div>
+                    <p style="text-align: center; font-size: 0.82rem; color: #64748b; margin-top: 10px;">
+                        <strong>Key Insight:</strong> High food waste per capita does not correlate with high hunger scores. Waste is widespread in high-income industrialized nations, whereas hunger is concentrated in under-resourced distribution systems.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TABLEAU VIEW -->
+        <!-- ========================================================================= -->
+        <div id="tableau-view" class="view-section">
+            <div class="tableau-shell">
+                <div class="tableau-titlebar">
+                    <span><i class="fa-solid fa-chart-pie" style="color: #e67e22;"></i> Tableau Desktop Public Edition - sec1</span>
+                    <span style="font-weight: 600; color: #0284c7;">DSU Data Science Lab</span>
+                </div>
+                <div class="tableau-controls">
+                    <span>File</span> &bull; <span>Data</span> &bull; <span>Worksheet</span> &bull; <span>Dashboard</span> &bull; <span>Story</span> &bull; <span>Analysis</span> &bull; <span>Map</span> &bull; <span>Format</span> &bull; <span>Server</span>
+                </div>
+
+                <div style="padding: 24px;">
+                    <!-- TABLEAU DASHBOARD 1 -->
+                    <div id="tableau-page-1">
+                        <div class="grid-2x2">
+                            <!-- Top Left: Top 10 Countries by Total Food Waste -->
+                            <div class="dashboard-card">
+                                <h3 class="card-title">Top 10 Countries by Total Food Waste (Tons)</h3>
+                                <div style="height: 300px; width: 100%;">
+                                    <canvas id="tableauTopWasteChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Top Right: Bar Graph (Rose Pink) -->
+                            <div class="dashboard-card">
+                                <h3 class="card-title">Bar Graph</h3>
+                                <div style="height: 300px; width: 100%;">
+                                    <canvas id="tableauRoseBarChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Left: Pie Chart of Food Waste Categories -->
+                            <div class="dashboard-card">
+                                <h3 class="card-title">Pie chart of food waste</h3>
+                                <div style="height: 320px; width: 100%; position: relative;">
+                                    <canvas id="tableauPieChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Right: Bullet Graph / Distribution -->
+                            <div class="dashboard-card">
+                                <h3 class="card-title">Bullet Graph (Waste Distribution by Country)</h3>
+                                <div style="height: 320px; width: 100%;">
+                                    <canvas id="tableauBulletChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLEAU DASHBOARD 2 -->
+                    <div id="tableau-page-2" style="display: none;">
+                        <div class="dashboard-card" style="margin-bottom: 24px;">
+                            <h3 class="card-title">Bar Chart: Global Hunger Index (2021) by Entity</h3>
+                            <div style="height: 360px; width: 100%;">
+                                <canvas id="tableauHungerBarChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3 class="card-title">Line Graph: Historical Global Hunger Index Trends</h3>
+                            <div style="height: 260px; width: 100%;">
+                                <canvas id="tableauHistoricalLineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLEAU DASHBOARD 3 -->
+                    <div id="tableau-page-3" style="display: none;">
+                        <div class="dashboard-card">
+                            <h3 class="card-title">Map: Country-wise Total Waste (Tons) Choropleth</h3>
+                            <p style="text-align: center; color: #64748b; font-size: 0.85rem; margin-bottom: 12px;">
+                                Color intensity reflects food waste tonnage from 5.8M to 6.9M Tons.
+                            </p>
+                            <div id="tableauMap" class="map-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- CLEANED DATASET VIEW -->
+        <!-- ========================================================================= -->
+        <div id="data-view" class="view-section">
+            <div class="dashboard-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--dsu-purple);">Cleaned & Merged Food Wastage vs Hunger Dataset</h2>
+                        <p style="font-size: 0.85rem; color: #64748b;">Joined on Country after Power Query standardization and null cleaning.</p>
+                    </div>
+                    <button onclick="downloadCSV()" class="subnav-btn" style="background: var(--dsu-purple); color: #fff; padding: 10px 18px;">
+                        <i class="fa-solid fa-download"></i> Download CSV Data
+                    </button>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="styled-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>Total Waste (Tons)</th>
+                                <th>Waste Per Capita (Kg)</th>
+                                <th>Economic Loss ($M)</th>
+                                <th>Global Hunger Index</th>
+                                <th>Severity Category</th>
+                                <th>Hunger-to-Waste Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- KEY INSIGHTS & FINDINGS VIEW -->
+        <!-- ========================================================================= -->
+        <div id="insights-view" class="view-section">
+            <div class="grid-2x2">
+                <div class="dashboard-card">
+                    <h3 style="font-size: 1.15rem; color: var(--dsu-purple); font-weight: 800; margin-bottom: 12px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: #e11d48;"></i> 1. The Paradox of Food Surplus & Scarcity
+                    </h3>
+                    <p style="font-size: 0.88rem; line-height: 1.6; color: #334155;">
+                        High food waste does not correspond to high hunger levels. Developed countries (e.g. Italy, Canada, USA, France, Spain) generate the largest waste per capita (exceeding 2,200 kg/year) and massive economic losses ($1.0M - $1.37M each), yet maintain low hunger scores (&lt; 5.0).
+                    </p>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3 style="font-size: 1.15rem; color: var(--dsu-purple); font-weight: 800; margin-bottom: 12px;">
+                        <i class="fa-solid fa-earth-americas" style="color: #0284c7;"></i> 2. Concentration of Severe Hunger
+                    </h3>
+                    <p style="font-size: 0.88rem; line-height: 1.6; color: #334155;">
+                        Countries suffering from high to extreme hunger severity (India: 33.2, Indonesia: 24.1, Ethiopia: 20.5, South Africa: 15.4) are plagued by distribution bottlenecks, post-harvest losses, and socio-economic instability rather than lack of global food supply.
+                    </p>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3 style="font-size: 1.15rem; color: var(--dsu-purple); font-weight: 800; margin-bottom: 12px;">
+                        <i class="fa-solid fa-sack-dollar" style="color: #16a34a;"></i> 3. Staggering Economic Loss
+                    </h3>
+                    <p style="font-size: 0.88rem; line-height: 1.6; color: #334155;">
+                        The cumulative economic loss across analyzed countries stands at <strong>$17.80 Million</strong>. Eliminating even 15% of food wastage in OECD nations could recover hundreds of thousands of tons of edible calories for vulnerable regions.
+                    </p>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3 style="font-size: 1.15rem; color: var(--dsu-purple); font-weight: 800; margin-bottom: 12px;">
+                        <i class="fa-solid fa-utensils" style="color: #d97706;"></i> 4. Category Breakdown Analysis
+                    </h3>
+                    <p style="font-size: 0.88rem; line-height: 1.6; color: #334155;">
+                        Tableau food category analysis reveals that <strong>Prepared Food (711 units)</strong>, <strong>Beverages (639 units)</strong>, and <strong>Bakery Items (630 units)</strong> constitute the top three sources of discard, representing rapid perishability and consumer over-purchasing in urban markets.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Dayananda Sagar University &bull; School of Engineering &bull; Department of CSE (Data Science)</p>
+        <p style="margin-top: 6px; font-size: 0.78rem;">Project: "Food Wastage vs Hunger Index Dashboard using Power BI & Tableau" &bull; Academic Year 2025–26</p>
+    </footer>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // Core Data Definitions
+        const countryData = [
+            { country: "India", wasteTons: 820000, wasteKg: 2022.1, econLoss: 0.82, ghi: 33.2, cat: "Serious", lat: 20.5937, lng: 78.9629 },
+            { country: "Indonesia", wasteTons: 690000, wasteKg: 1535.9, econLoss: 0.69, ghi: 24.1, cat: "Moderate", lat: -0.7893, lng: 113.9213 },
+            { country: "Ethiopia", wasteTons: 490000, wasteKg: 1450.0, econLoss: 0.49, ghi: 20.5, cat: "Serious", lat: 9.145, lng: 40.4897 },
+            { country: "South Africa", wasteTons: 970000, wasteKg: 2186.6, econLoss: 0.97, ghi: 15.4, cat: "Moderate", lat: -30.5595, lng: 22.9375 },
+            { country: "Saudi Arabia", wasteTons: 720000, wasteKg: 2158.3, econLoss: 0.72, ghi: 9.8, cat: "Low", lat: 23.8859, lng: 45.0792 },
+            { country: "Mexico", wasteTons: 1040000, wasteKg: 2291.0, econLoss: 1.04, ghi: 9.0, cat: "Low", lat: 23.6345, lng: -102.5528 },
+            { country: "Russia", wasteTons: 830000, wasteKg: 1536.5, econLoss: 0.83, ghi: 7.5, cat: "Low", lat: 61.524, lng: 105.3188 },
+            { country: "China", wasteTons: 670000, wasteKg: 1712.6, econLoss: 0.67, ghi: 7.0, cat: "Low", lat: 35.8617, lng: 104.1954 },
+            { country: "Brazil", wasteTons: 710000, wasteKg: 1889.6, econLoss: 0.71, ghi: 6.8, cat: "Low", lat: -14.235, lng: -51.9253 },
+            { country: "Turkey", wasteTons: 720000, wasteKg: 1952.2, econLoss: 0.72, ghi: 6.2, cat: "Low", lat: 38.9637, lng: 35.2433 },
+            { country: "Italy", wasteTons: 1340000, wasteKg: 2489.6, econLoss: 1.37, ghi: 4.1, cat: "Low", lat: 41.8719, lng: 12.5674 },
+            { country: "Canada", wasteTons: 1210000, wasteKg: 2350.2, econLoss: 1.21, ghi: 3.9, cat: "Low", lat: 56.1304, lng: -106.3468 },
+            { country: "Spain", wasteTons: 1100000, wasteKg: 2291.0, econLoss: 1.10, ghi: 4.2, cat: "Low", lat: 40.4637, lng: -3.7492 },
+            { country: "France", wasteTons: 1070000, wasteKg: 2186.6, econLoss: 1.07, ghi: 3.8, cat: "Low", lat: 46.2276, lng: 2.2137 },
+            { country: "Argentina", wasteTons: 1040000, wasteKg: 2158.3, econLoss: 1.04, ghi: 5.9, cat: "Low", lat: -38.4161, lng: -63.6167 },
+            { country: "USA", wasteTons: 950000, wasteKg: 2489.6, econLoss: 0.95, ghi: 4.5, cat: "Low", lat: 37.0902, lng: -95.7129 },
+            { country: "Australia", wasteTons: 900000, wasteKg: 2250.0, econLoss: 0.90, ghi: 3.6, cat: "Low", lat: -25.2744, lng: 133.7751 },
+            { country: "Germany", wasteTons: 710000, wasteKg: 1910.0, econLoss: 0.71, ghi: 3.5, cat: "Low", lat: 51.1657, lng: 10.4515 },
+            { country: "Japan", wasteTons: 580000, wasteKg: 1420.0, econLoss: 0.58, ghi: 3.4, cat: "Low", lat: 36.2048, lng: 138.2529 }
+        ];
+
+        // Tableau specific tonnage (6M-7M range)
+        const tableauTonnage = [
+            { country: "Turkey", waste: 6879886, lat: 38.9637, lng: 35.2433 },
+            { country: "Canada", waste: 6790678, lat: 56.1304, lng: -106.3468 },
+            { country: "Mexico", waste: 6589170, lat: 23.6345, lng: -102.5528 },
+            { country: "USA", waste: 6446335, lat: 37.0902, lng: -95.7129 },
+            { country: "China", waste: 6411096, lat: 35.8617, lng: 104.1954 },
+            { country: "Brazil", waste: 6391753, lat: -14.235, lng: -51.9253 },
+            { country: "France", waste: 6384496, lat: 46.2276, lng: 2.2137 },
+            { country: "Indonesia", waste: 6294448, lat: -0.7893, lng: 113.9213 },
+            { country: "India", waste: 6245314, lat: 20.5937, lng: 78.9629 },
+            { country: "Argentina", waste: 6082368, lat: -38.4161, lng: -63.6167 },
+            { country: "South Africa", waste: 6056470, lat: -30.5595, lng: 22.9375 },
+            { country: "Saudi Arabia", waste: 5983284, lat: 23.8859, lng: 45.0792 },
+            { country: "Australia", waste: 5887361, lat: -25.2744, lng: 133.7751 },
+            { country: "Russia", waste: 5832689, lat: 61.524, lng: 105.3188 }
+        ];
+
+        // Populate Table
+        function renderTable() {
+            const tbody = document.getElementById("tableBody");
+            tbody.innerHTML = "";
+            countryData.forEach(row => {
+                const ratio = (row.ghi / (row.wasteTons / 100000)).toFixed(3);
+                let badgeClass = "badge-low";
+                if(row.cat === "Serious") badgeClass = "badge-serious";
+                if(row.cat === "Moderate") badgeClass = "badge-moderate";
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><strong>${row.country}</strong></td>
+                    <td>${(row.wasteTons / 1000000).toFixed(2)}M Tons</td>
+                    <td>${row.wasteKg} Kg</td>
+                    <td>$${row.econLoss.toFixed(2)}M</td>
+                    <td><strong>${row.ghi}</strong></td>
+                    <td><span class="badge-pill ${badgeClass}">${row.cat}</span></td>
+                    <td>${ratio}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Platform Navigation
+        function switchPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+            
+            if (platform === 'pbi') {
+                document.querySelectorAll('.platform-btn')[0].classList.add('active');
+                document.getElementById('pbi-view').classList.add('active');
+                document.getElementById('pbi-subnav').style.display = 'flex';
+                document.getElementById('tableau-subnav').style.display = 'none';
+            } else if (platform === 'tableau') {
+                document.querySelectorAll('.platform-btn')[1].classList.add('active');
+                document.getElementById('tableau-view').classList.add('active');
+                document.getElementById('pbi-subnav').style.display = 'none';
+                document.getElementById('tableau-subnav').style.display = 'flex';
+                setTimeout(() => initTableauCharts(), 100);
+            } else if (platform === 'data') {
+                document.querySelectorAll('.platform-btn')[2].classList.add('active');
+                document.getElementById('data-view').classList.add('active');
+                document.getElementById('pbi-subnav').style.display = 'none';
+                document.getElementById('tableau-subnav').style.display = 'none';
+                renderTable();
+            } else if (platform === 'insights') {
+                document.querySelectorAll('.platform-btn')[3].classList.add('active');
+                document.getElementById('insights-view').classList.add('active');
+                document.getElementById('pbi-subnav').style.display = 'none';
+                document.getElementById('tableau-subnav').style.display = 'none';
+            }
+        }
+
+        function switchPbiPage(page) {
+            document.querySelectorAll('#pbi-subnav .subnav-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === page - 1);
+            });
+            document.getElementById('pbi-page-1').style.display = page === 1 ? 'block' : 'none';
+            document.getElementById('pbi-page-2').style.display = page === 2 ? 'block' : 'none';
+            document.getElementById('pbi-page-3').style.display = page === 3 ? 'block' : 'none';
+
+            if (page === 2) {
+                setTimeout(() => initPbiMap(), 150);
+            }
+        }
+
+        function switchTableauPage(page) {
+            document.querySelectorAll('#tableau-subnav .subnav-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === page - 1);
+            });
+            document.getElementById('tableau-page-1').style.display = page === 1 ? 'block' : 'none';
+            document.getElementById('tableau-page-2').style.display = page === 2 ? 'block' : 'none';
+            document.getElementById('tableau-page-3').style.display = page === 3 ? 'block' : 'none';
+
+            if (page === 3) {
+                setTimeout(() => initTableauMap(), 150);
+            }
+        }
+
+        // =========================================================================
+        // POWER BI CHARTS INITIALIZATION
+        // =========================================================================
+        function initPbiCharts() {
+            // 1. Top 10 Countries by Hunger Index (Purple Bars)
+            const hungerCountries = ["India", "Indonesia", "(Blank)", "South Africa", "Saudi Arabia", "Mexico", "Russia", "China", "Brazil", "Turkey"];
+            const hungerValues = [33.2, 24.1, 20.5, 15.4, 9.8, 9.0, 7.5, 7.0, 6.8, 6.2];
+
+            const ctx1 = document.getElementById('pbiHungerBarChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: hungerCountries,
+                    datasets: [{
+                        label: 'Avg Hunger Index',
+                        data: hungerValues,
+                        backgroundColor: '#543884',
+                        borderRadius: 4,
+                        barPercentage: 0.65
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `Avg Hunger Index: ${ctx.raw}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { weight: 600, size: 11 }, maxRotation: 35, minRotation: 35 }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 38,
+                            grid: { strokeDashArray: [4, 4], color: '#e2e8f0' },
+                            title: { display: true, text: 'Avg Hunger Index', font: { weight: 700 } }
+                        }
+                    }
+                }
+            });
+
+            // 2. Donut Chart Total Waste by Country
+            const donutLabels = [
+                "Italy 1.34M (7.61%)", "Canada 1.21M (6.84%)", "Spain 1.1M (6.22%)", "France 1.07M (6.04%)",
+                "Argentina 1.04M (5.91%)", "Mexico 1.04M (5.87%)", "South Africa 0.97M (5.48%)", "USA 0.95M (5.35%)",
+                "Australia 0.95M (5.35%)", "Russia 0.83M (4.68%)", "India 0.82M (4.66%)", "Saudi Arabia 0.72M (4.09%)",
+                "Turkey 0.72M (4.08%)", "Brazil 0.71M (4.04%)", "Germany 0.71M (4.01%)", "Indonesia 0.69M (3.93%)",
+                "China 0.67M (3.81%)", "Japan 0.58M (3.29%)"
+            ];
+            const donutValues = [1.34, 1.21, 1.10, 1.07, 1.04, 1.04, 0.97, 0.95, 0.95, 0.83, 0.82, 0.72, 0.72, 0.71, 0.71, 0.69, 0.67, 0.58];
+            const donutColors = [
+                '#0078D4', '#103F91', '#D85826', '#4B0082', '#9C27B0', '#E91E63',
+                '#E6AF2E', '#008080', '#2E7D32', '#29B6F6', '#26C6DA', '#AB47BC',
+                '#FFA726', '#8D6E63', '#78909C', '#26A69A', '#66BB6A', '#FF7043'
+            ];
+
+            const ctx2 = document.getElementById('pbiDonutChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: donutLabels,
+                    datasets: [{
+                        data: donutValues,
+                        backgroundColor: donutColors,
+                        borderWidth: 1.5,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                font: { size: 9.5 }
+                            }
+                        }
+                    },
+                    cutout: '58%'
+                }
+            });
+
+            // 3. Trend Line Over Years (Power BI Page 3)
+            const trendYears = ["2018", "2019", "2020", "2021", "2022", "2023", "2024"];
+            const wasteLine = [1.05, 2.92, 2.78, 3.01, 2.24, 3.12, 2.58];
+            const hungerLine = [7.2, 16.8, 8.9, 7.5, 6.8, 16.2, 24.3];
+
+            const ctx3 = document.getElementById('pbiTrendLineChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: trendYears,
+                    datasets: [
+                        {
+                            label: 'Sum of Sum of Total Waste',
+                            data: wasteLine,
+                            borderColor: '#E63946',
+                            backgroundColor: '#E63946',
+                            borderWidth: 2.5,
+                            tension: 0.1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Avg Hunger Index',
+                            data: hungerLine,
+                            borderColor: '#1E3A8A',
+                            backgroundColor: '#1E3A8A',
+                            borderWidth: 2.5,
+                            tension: 0.1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Sum of Sum of Total Waste (Millions)', font: { weight: 600 } }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Avg Hunger Index', font: { weight: 600 } }
+                        }
+                    }
+                }
+            });
+
+            // 4. Top 10 Countries by Food Waste (Slate Blue Bars)
+            const topWasteCountries = ["Italy", "Canada", "Spain", "France", "Argentina", "Mexico", "South Africa", "USA", "Australia", "Russia"];
+            const topWasteVals = [1.34, 1.21, 1.10, 1.07, 1.04, 1.04, 0.97, 0.95, 0.95, 0.90];
+
+            const ctx4 = document.getElementById('pbiWasteBarChart').getContext('2d');
+            new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: topWasteCountries,
+                    datasets: [{
+                        label: 'Total Waste (Millions Tons)',
+                        data: topWasteVals,
+                        backgroundColor: '#4361EE',
+                        borderRadius: 4,
+                        barPercentage: 0.65
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { font: { weight: 600, size: 10.5 }, maxRotation: 35, minRotation: 35 } },
+                        y: {
+                            beginAtZero: true,
+                            max: 1.5,
+                            title: { display: true, text: 'Sum of Sum of Total Waste (M)', font: { weight: 600 } }
+                        }
+                    }
+                }
+            });
+
+            // 5. Scatter Plot (Food Waste Vs Hunger)
+            const scatterPoints = [
+                { x: 1450, y: 20.5, country: "(Blank) / Ethiopia" },
+                { x: 1535.9, y: 24.1, country: "Indonesia" },
+                { x: 1536.5, y: 7.5, country: "Russia" },
+                { x: 1712.6, y: 7.0, country: "China" },
+                { x: 1889.6, y: 6.8, country: "Brazil" },
+                { x: 1952.2, y: 6.2, country: "Turkey" },
+                { x: 2022.1, y: 33.2, country: "India" },
+                { x: 2158.3, y: 9.8, country: "Saudi Arabia" },
+                { x: 2186.6, y: 15.4, country: "South Africa" },
+                { x: 2291.0, y: 9.0, country: "Mexico" },
+                { x: 2489.6, y: 4.1, country: "Italy / USA" }
+            ];
+
+            const ctx5 = document.getElementById('pbiScatterChart').getContext('2d');
+            new Chart(ctx5, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Country Relationship',
+                        data: scatterPoints,
+                        backgroundColor: '#E63946',
+                        pointRadius: 8,
+                        pointHoverRadius: 11
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.raw.country}: Waste ${ctx.raw.x} Kg, Hunger ${ctx.raw.y}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Weighted Avg Waste per Capita (Kg)', font: { weight: 700 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 42,
+                            title: { display: true, text: 'Avg Hunger Index', font: { weight: 700 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // =========================================================================
+        // TABLEAU CHARTS INITIALIZATION
+        // =========================================================================
+        let tableauInitialized = false;
+        function initTableauCharts() {
+            if (tableauInitialized) return;
+            tableauInitialized = true;
+
+            // 1. Top 10 Countries by Total Waste (Tableau Vertical Bars)
+            const tabCountries = ["Argentina", "Australia", "Brazil", "Canada", "China", "France", "Germany", "India", "Indonesia", "Italy", "Japan", "Mexico", "Russia", "Saudi Arabia", "South Africa", "South Korea", "Spain", "Turkey", "UK", "USA"];
+            const tabWasteVals = [6.08, 5.88, 6.39, 6.79, 6.41, 6.38, 6.45, 6.24, 6.29, 6.32, 5.89, 6.58, 5.83, 5.98, 6.05, 5.92, 6.68, 6.87, 6.25, 6.44];
+            const tabColors = [
+                '#3B82F6', '#F59E0B', '#10B981', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4',
+                '#84CC16', '#6366F1', '#14B8A6', '#F97316', '#D946EF', '#64748B', '#0EA5E9',
+                '#A855F7', '#E11D48', '#22C55E', '#F43F5E', '#EAB308', '#38BDF8'
+            ];
+
+            const ctxT1 = document.getElementById('tableauTopWasteChart').getContext('2d');
+            new Chart(ctxT1, {
+                type: 'bar',
+                data: {
+                    labels: tabCountries.slice(0, 10),
+                    datasets: [{
+                        data: tabWasteVals.slice(0, 10),
+                        backgroundColor: tabColors.slice(0, 10),
+                        borderRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 45 } },
+                        y: { max: 7.5, title: { display: true, text: 'Total Waste (Million Tons)' } }
+                    }
+                }
+            });
+
+            // 2. Tableau Rose-Pink Horizontal Bar Graph
+            const ctxT2 = document.getElementById('tableauRoseBarChart').getContext('2d');
+            new Chart(ctxT2, {
+                type: 'bar',
+                data: {
+                    labels: tabCountries,
+                    datasets: [{
+                        data: tabWasteVals.map(v => v * 1000),
+                        backgroundColor: '#D85A87',
+                        borderRadius: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { max: 7500, title: { display: true, text: 'Value (Thousands of Tons)' } },
+                        y: { ticks: { font: { size: 9 } } }
+                    }
+                }
+            });
+
+            // 3. Tableau Pie Chart of Food Waste Categories
+            const catLabels = ["Prepared Food (711)", "Bakery Items (630)", "Beverages (639)", "Dairy Products (616)", "Frozen Food (506)", "Fruits & Vegetables (620)", "Grains & Cereals (583)", "Meat & Seafood (605)"];
+            const catVals = [711, 630, 639, 616, 506, 620, 583, 605];
+            const catColors = ['#B76D88', '#3498DB', '#F39C12', '#E67E22', '#1ABC9C', '#2ECC71', '#F1C40F', '#9B59B6'];
+
+            const ctxT3 = document.getElementById('tableauPieChart').getContext('2d');
+            new Chart(ctxT3, {
+                type: 'pie',
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        data: catVals,
+                        backgroundColor: catColors,
+                        borderWidth: 1.5,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 9.5 } } }
+                    }
+                }
+            });
+
+            // 4. Bullet Graph / Distribution Simulation
+            const ctxT4 = document.getElementById('tableauBulletChart').getContext('2d');
+            new Chart(ctxT4, {
+                type: 'bar',
+                data: {
+                    labels: ["2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025 (Target)"],
+                    datasets: [
+                        {
+                            label: 'Actual Waste Tons',
+                            data: [6100, 6350, 6200, 6500, 6420, 6700, 6550, 6800],
+                            backgroundColor: '#94A3B8',
+                            barThickness: 16
+                        },
+                        {
+                            label: 'Threshold Target Range',
+                            data: [7000, 7000, 7000, 7000, 7000, 7000, 7000, 7000],
+                            type: 'line',
+                            borderColor: '#0F172A',
+                            borderDash: [5, 5],
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 5000, max: 7500, title: { display: true, text: 'Total Waste (Tons x 1000)' } }
+                    }
+                }
+            });
+
+            // 5. Tableau Dashboard 2 Hunger Bar Chart
+            const hungerEntities = ["Angola", "Afghanistan", "Burkina Faso", "Burundi", "Cambodia", "Bangladesh", "Botswana", "Benin", "Bolivia", "Albania", "Armenia", "Azerbaijan", "Algeria", "Bulgaria", "Belarus", "Brazil", "Bosnia"];
+            const hunger2021 = [165, 157, 135, 110, 110, 110, 100, 95, 80, 52, 50, 48, 42, 30, 22, 22, 20];
+            const blueShades = hunger2021.map(v => {
+                if (v >= 150) return '#1E3A8A';
+                if (v >= 100) return '#2563EB';
+                if (v >= 60) return '#60A5FA';
+                return '#93C5FD';
+            });
+
+            const ctxT5 = document.getElementById('tableauHungerBarChart').getContext('2d');
+            new Chart(ctxT5, {
+                type: 'bar',
+                data: {
+                    labels: hungerEntities,
+                    datasets: [{
+                        data: hunger2021,
+                        backgroundColor: blueShades,
+                        borderRadius: 3
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { max: 180, title: { display: true, text: 'Global Hunger Index (2021)' } }
+                    }
+                }
+            });
+
+            // 6. Tableau Historical Line Graph
+            const histYears = ["2000", "2005", "2010", "2015", "2020", "2021"];
+            const histGhi = [2800, 2400, 2000, 1800, 1950, 2149];
+
+            const ctxT6 = document.getElementById('tableauHistoricalLineChart').getContext('2d');
+            new Chart(ctxT6, {
+                type: 'line',
+                data: {
+                    labels: histYears,
+                    datasets: [{
+                        label: 'Global Hunger Index Aggregate',
+                        data: histGhi,
+                        borderColor: '#2563EB',
+                        backgroundColor: '#2563EB',
+                        tension: 0.1,
+                        pointRadius: 6,
+                        pointHoverRadius: 9
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `Year: ${ctx.label} | Global Hunger Index: ${ctx.raw}`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { title: { display: true, text: 'Value' } }
+                    }
+                }
+            });
+        }
+
+        // =========================================================================
+        // LEAFLET MAPS INITIALIZATION
+        // =========================================================================
+        let pbiMapInit = false;
+        function initPbiMap() {
+            if (pbiMapInit) return;
+            pbiMapInit = true;
+
+            const map = L.map('pbiMap', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 1.5
+            });
+
+            // Dark Satellite / CartoDB Dark Matter
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors & CartoDB',
+                maxZoom: 18
+            }).addTo(map);
+
+            countryData.forEach(c => {
+                const radius = Math.sqrt(c.wasteTons) / 25;
+                const circle = L.circleMarker([c.lat, c.lng], {
+                    radius: radius,
+                    fillColor: '#38BDF8',
+                    color: '#0284C7',
+                    weight: 2,
+                    opacity: 0.9,
+                    fillOpacity: 0.65
+                }).addTo(map);
+
+                circle.bindPopup(`
+                    <div style="font-family: sans-serif; font-size: 13px;">
+                        <strong style="color: #0f172a; font-size: 15px;">${c.country}</strong><br>
+                        <hr style="margin: 6px 0; border: none; border-top: 1px solid #e2e8f0;">
+                        <b>Total Food Waste:</b> ${(c.wasteTons / 1000000).toFixed(2)}M Tons<br>
+                        <b>Waste Per Capita:</b> ${c.wasteKg} Kg<br>
+                        <b>Economic Loss:</b> $${c.econLoss.toFixed(2)}M<br>
+                        <b>Hunger Index:</b> ${c.ghi} (${c.cat})
+                    </div>
+                `);
+            });
+        }
+
+        let tableauMapInit = false;
+        function initTableauMap() {
+            if (tableauMapInit) return;
+            tableauMapInit = true;
+
+            const map = L.map('tableauMap', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 1.5
+            });
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap & CartoDB',
+                maxZoom: 18
+            }).addTo(map);
+
+            tableauTonnage.forEach(c => {
+                const circle = L.circleMarker([c.lat, c.lng], {
+                    radius: 22,
+                    fillColor: '#E63946',
+                    color: '#9D0208',
+                    weight: 2,
+                    fillOpacity: 0.75
+                }).addTo(map);
+
+                circle.bindPopup(`
+                    <div style="font-family: sans-serif; font-size: 13px;">
+                        <strong>Country: ${c.country}</strong><br>
+                        <b>Total Waste (Tons):</b> ${c.waste.toLocaleString()}
+                    </div>
+                `);
+            });
+        }
+
+        // CSV Export Function
+        function downloadCSV() {
+            let csv = "Country,Total Waste (Tons),Waste Per Capita (Kg),Economic Loss (Million $),Global Hunger Index,Index Category,Hunger-to-Waste Ratio\n";
+            countryData.forEach(r => {
+                const ratio = (r.ghi / (r.wasteTons / 100000)).toFixed(3);
+                csv += `"${r.country}",${r.wasteTons},${r.wasteKg},${r.econLoss},${r.ghi},"${r.cat}",${ratio}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Cleaned_Food_Wastage_vs_Hunger_Dataset.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Window Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initPbiCharts();
+            renderTable();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+// ==============================================================================
+// DAX Measures: Food Wastage vs Hunger Index Power BI Project
+// Dayananda Sagar University - Department of CSE (Data Science)
+// ==============================================================================
+
+// ------------------------------------------------------------------------------
+// 1. KPI CARD MEASURES
+// ------------------------------------------------------------------------------
+
+// Overall Total Economic Loss in Millions ($) -> Exactly $17.80M
+Total Economic Loss ($M) = 
+SUM('Cleaned Data'[Economic Loss (Million $)])
+
+// Selected Country Economic Loss ($M) -> Displays 1.37M for Italy or active slicer
+Selected Economic Loss ($M) = 
+VAR SelectedLoss = SUM('Cleaned Data'[Economic Loss (Million $)])
+RETURN 
+IF(
+    ISFILTERED('Cleaned Data'[Country]),
+    SelectedLoss,
+    CALCULATE(SUM('Cleaned Data'[Economic Loss (Million $)]), 'Cleaned Data'[Country] = "Italy")
+)
+
+// Formatted KPI String for Card Display
+Total Economic Loss Card Label = 
+FORMAT([Total Economic Loss ($M)], "$#,##0.00") & "M"
+
+
+// ------------------------------------------------------------------------------
+// 2. HUNGER INDEX MEASURES
+// ------------------------------------------------------------------------------
+
+// Average Hunger Index
+Avg Hunger Index = 
+AVERAGE('Cleaned Data'[Global Hunger Index])
+
+// Formatted Avg Hunger Index
+Avg Hunger Index Display = 
+FORMAT([Avg Hunger Index], "0.0")
+
+// Top 10 Hunger Rank
+Hunger Rank = 
+RANKX(ALL('Cleaned Data'[Country]), [Avg Hunger Index], , DESC, Dense)
+
+// Filter Top 10 Countries By Hunger Index
+Is Top 10 Hunger = 
+IF([Hunger Rank] <= 10, 1, 0)
+
+
+// ------------------------------------------------------------------------------
+// 3. FOOD WASTAGE MEASURES
+// ------------------------------------------------------------------------------
+
+// Total Food Waste in Tons
+Total Waste (Tons) = 
+SUM('Cleaned Data'[Total Waste (Tons)])
+
+// Total Food Waste in Millions of Tons (Sum of Sum of Total Waste)
+Sum of Total Waste (Millions) = 
+DIVIDE([Total Waste (Tons)], 1000000, 0)
+
+// Top 10 Waste Rank
+Waste Rank = 
+RANKX(ALL('Cleaned Data'[Country]), [Total Waste (Tons)], , DESC, Dense)
+
+// Filter Top 10 Countries By Waste
+Is Top 10 Waste = 
+IF([Waste Rank] <= 10, 1, 0)
+
+// Percentage Contribution to Global Waste (Donut Chart)
+Waste Share % = 
+DIVIDE(
+    [Total Waste (Tons)],
+    CALCULATE([Total Waste (Tons)], ALL('Cleaned Data')),
+    0
+)
+
+
+// ------------------------------------------------------------------------------
+// 4. SCATTER PLOT & RATIO MEASURES
+// ------------------------------------------------------------------------------
+
+// Weighted Average Waste Per Capita (Kg)
+Weighted Avg Waste per Capita (Kg) = 
+DIVIDE(
+    SUMX('Cleaned Data', 'Cleaned Data'[Waste Per Capita (Kg)] * 'Cleaned Data'[Total Waste (Tons)]),
+    [Total Waste (Tons)],
+    0
+)
+
+// Hunger-to-Waste Comparison Ratio
+Hunger to Waste Ratio = 
+DIVIDE([Avg Hunger Index], [Sum of Total Waste (Millions)], 0)
+
+
+// ------------------------------------------------------------------------------
+// 5. SEVERITY CATEGORY COLOR CONDITIONAL FORMATTING
+// ------------------------------------------------------------------------------
+Hunger Severity Color = 
+SWITCH(
+    TRUE(),
+    [Avg Hunger Index] >= 35.0, "#7F1D1D", // Extremely Alarming (Dark Red)
+    [Avg Hunger Index] >= 20.0, "#543884", // Serious (DSU Purple)
+    [Avg Hunger Index] >= 10.0, "#2563EB", // Moderate (Blue)
+    "#10B981"                              // Low (Green)
+)

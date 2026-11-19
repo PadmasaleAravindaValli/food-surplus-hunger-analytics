@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "datasetReference": {
+    "byPath": {
+      "path": "../Food_Wastage_vs_Hunger.SemanticModel"
+    },
+    "byConnection": null
+  }
+}

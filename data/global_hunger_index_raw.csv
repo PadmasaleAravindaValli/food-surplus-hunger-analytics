@@ -1,0 +1,39 @@
+Country,Year,Global Hunger Index,Index Category
+India,2021,27.5,Serious
+India,2024,33.2,Serious
+Indonesia,2021,18.0,Moderate
+Indonesia,2024,24.1,Moderate
+Ethiopia,2021,24.1,Serious
+Ethiopia,2024,20.5,Serious
+South Africa,2021,12.9,Moderate
+South Africa,2024,15.4,Moderate
+Saudi Arabia,2021,8.5,Low
+Saudi Arabia,2024,9.8,Low
+Mexico,2021,7.2,Low
+Mexico,2024,9.0,Low
+Russia,2021,6.2,Low
+Russia,2024,7.5,Low
+China,2021,5.0,Low
+China,2024,7.0,Low
+Brazil,2021,5.3,Low
+Brazil,2024,6.8,Low
+Turkey,2021,5.1,Low
+Turkey,2024,6.2,Low
+USA,2021,3.8,Low
+USA,2024,4.5,Low
+Canada,2021,3.2,Low
+Canada,2024,3.9,Low
+Italy,2021,3.5,Low
+Italy,2024,4.1,Low
+France,2021,3.4,Low
+France,2024,3.8,Low
+Spain,2021,3.6,Low
+Spain,2024,4.2,Low
+Argentina,2021,5.2,Low
+Argentina,2024,5.9,Low
+Australia,2021,3.1,Low
+Australia,2024,3.6,Low
+Germany,2021,3.0,Low
+Germany,2024,3.5,Low
+Japan,2021,3.1,Low
+Japan,2024,3.4,Low

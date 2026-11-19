@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC Project Report - Food Wastage vs Hunger Index</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        @media print {
+            .page-break { page-break-before: always; }
+            .no-print { display: none !important; }
+            body { font-size: 11pt; line-height: 1.5; color: #000; background: #fff; }
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .report-page {
+            background: #ffffff;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            padding: 50px 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .uni-crest-box {
+            text-align: center;
+            border-bottom: 2px solid #543884;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .uni-crest-title {
+            font-size: 20pt;
+            font-weight: 800;
+            color: #543884;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+        }
+        .uni-crest-sub {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #475569;
+        }
+        .project-title-box {
+            text-align: center;
+            margin: 50px 0;
+            padding: 30px;
+            background: #faf5ff;
+            border-radius: 12px;
+            border: 1px solid #e9d5ff;
+        }
+        .project-title-box h1 {
+            font-size: 22pt;
+            color: #3b255e;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .team-card {
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .cert-signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+            padding-top: 20px;
+        }
+        .sig-block {
+            text-align: center;
+            border-top: 1px solid #94a3b8;
+            width: 240px;
+            padding-top: 8px;
+            font-size: 10pt;
+        }
+        table.toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table.toc-table th, table.toc-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 11pt;
+        }
+        table.toc-table th {
+            background: #543884;
+            color: #ffffff;
+            text-align: left;
+        }
+        h2.sec-heading {
+            color: #543884;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            font-size: 16pt;
+        }
+        .print-btn-bar {
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .print-btn {
+            background: #543884;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(84, 56, 132, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="print-btn-bar no-print">
+        <button class="print-btn" onclick="window.print()">
+            🖨️ Print / Save as PDF
+        </button>
+    </div>
+
+    <!-- COVER PAGE -->
+    <div class="report-page">
+        <div class="uni-crest-box">
+            <div class="uni-crest-title">DAYANANDA SAGAR UNIVERSITY</div>
+            <div class="uni-crest-sub">SCHOOL OF ENGINEERING &bull; HAROHALLI, KANAKAPURA ROAD – 562112</div>
+            <div style="font-weight: 700; color: #543884; margin-top: 5px;">DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING (DATA SCIENCE)</div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0; font-weight: 700; letter-spacing: 0.1em; color: #64748b;">
+            SEC PROJECT REPORT (2025–26)
+        </div>
+
+        <div class="project-title-box">
+            <h1>"Food Wastage vs Hunger Index Dashboard using Power BI & Tableau"</h1>
+            <p style="color: #64748b; font-weight: 600;">BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE ENGINEERING [DATA SCIENCE]</p>
+        </div>
+
+        <div style="margin: 40px 0;">
+            <p style="font-weight: 700; color: #334155; margin-bottom: 12px;">Submitted by:</p>
+            <div class="team-grid">
+                <div class="team-card"><strong>Aravinda Valli</strong><br><span style="color: #64748b;">USN: ENG23DS0077</span></div>
+                <div class="team-card"><strong>Vaishnavi T P</strong><br><span style="color: #64748b;">USN: ENG23DS0089</span></div>
+                <div class="team-card"><strong>Varshini B</strong><br><span style="color: #64748b;">USN: ENG23DS0090</span></div>
+                <div class="team-card"><strong>Yamini Pujar</strong><br><span style="color: #64748b;">USN: ENG23DS0093</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <p style="font-weight: 700; color: #334155; margin-bottom: 10px;">Under the Supervision of:</p>
+            <p><strong>Prof. Shashank Shekhar</strong> &mdash; Assistant Professor, Dept. of CSE (Data Science), DSU</p>
+            <p><strong>Prof. Manjula M</strong> &mdash; Assistant Professor, Dept. of CSE (Data Science), DSU</p>
+        </div>
+    </div>
+
+    <!-- CERTIFICATE -->
+    <div class="report-page page-break">
+        <div class="uni-crest-box">
+            <div class="uni-crest-title">DAYANANDA SAGAR UNIVERSITY</div>
+            <div class="uni-crest-sub">DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING (DATA SCIENCE)</div>
+        </div>
+
+        <h2 style="text-align: center; color: #543884; letter-spacing: 0.05em; margin: 30px 0;">CERTIFICATE</h2>
+
+        <p style="text-align: justify; font-size: 11.5pt; line-height: 1.8;">
+            It is certified that the mini project work entitled <strong>"Food Wastage vs Hunger Index Dashboard using Power BI & Tableau"</strong> has been carried out at Dayananda Sagar University, Bangalore, by <strong>P Aravinda Valli (ENG23DS0077)</strong>, <strong>Vaishnavi T P (ENG23DS0089)</strong>, <strong>Varshini B (ENG23DS0090)</strong>, and <strong>Yamini Pujar (ENG23DS0093)</strong>, Bonafide students of fifth Semester, B. Tech in partial fulfilment for the award of degree in <strong>Bachelor of Technology in Computer Science & Engineering (Data Science)</strong> during academic year 2025-26. It is certified that all corrections/suggestions indicated for Internal Assessment have been incorporated in the report deposited in departmental library.
+        </p>
+
+        <div class="cert-signatures">
+            <div class="sig-block">
+                <strong>Signature of the Guide</strong><br>
+                Prof. Shashank Shekhar / Prof. Manjula M
+            </div>
+            <div class="sig-block">
+                <strong>Signature of the Chairperson</strong><br>
+                Dr. Shaila S G
+            </div>
+        </div>
+    </div>
+
+    <!-- ACKNOWLEDGEMENT -->
+    <div class="report-page page-break">
+        <h2 class="sec-heading">ACKNOWLEDGEMENT</h2>
+        <p style="text-align: justify; font-size: 11pt; line-height: 1.8; margin-top: 20px;">
+            A project's successful completion offers a sense of satisfaction, but it is never finished without expressing gratitude to everyone who contributed to its accomplishment. We would like to convey our sincere gratitude to our esteemed university, <strong>Dayananda Sagar University</strong>, for offering the first-rate facilities.
+        </p>
+        <p style="text-align: justify; font-size: 11pt; line-height: 1.8;">
+            We are especially thankful to our Chairperson, <strong>Dr. Shaila S G</strong>, for providing necessary departmental facilities, moral support, and encouragement. The largest measure of our acknowledgment is reserved for <strong>Prof. Shashank Shekhar</strong> (Assistant Professor) and <strong>Prof. Manjula M</strong> (Assistant Professor), whose guidance and support made it possible to complete the project work in a timely manner.
+        </p>
+        <p style="text-align: justify; font-size: 11pt; line-height: 1.8;">
+            We would want to thank everyone who has assisted us in successfully completing this project work, both directly and indirectly. The staff has provided us with a great deal of direction and cooperation.
+        </p>
+
+        <div style="margin-top: 40px;">
+            <p><strong>Aravinda Valli</strong> &mdash; ENG23DS0077</p>
+            <p><strong>Vaishnavi T P</strong> &mdash; ENG23DS0089</p>
+            <p><strong>Varshini B</strong> &mdash; ENG23DS0090</p>
+            <p><strong>Yamini Pujar</strong> &mdash; ENG23DS0093</p>
+        </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="report-page page-break">
+        <h2 class="sec-heading">TABLE OF CONTENTS</h2>
+        <table class="toc-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">CHAPTER</th>
+                    <th>TITLE</th>
+                    <th style="width: 20%; text-align: right;">PAGE NO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Abstract</td><td style="text-align: right;">5</td></tr>
+                <tr><td>2</td><td>Introduction</td><td style="text-align: right;">6</td></tr>
+                <tr><td>3</td><td>Objectives & Scope of Work</td><td style="text-align: right;">7</td></tr>
+                <tr><td>4</td><td>Dataset Description</td><td style="text-align: right;">8</td></tr>
+                <tr><td>5</td><td>Description of Work</td><td style="text-align: right;">9</td></tr>
+                <tr><td>6</td><td>Methodology & Power Query Pipeline</td><td style="text-align: right;">10–12</td></tr>
+                <tr><td>7</td><td>Dashboard Outputs (Power BI & Tableau)</td><td style="text-align: right;">13–16</td></tr>
+                <tr><td>8</td><td>Results & Key Insights</td><td style="text-align: right;">17</td></tr>
+                <tr><td>9</td><td>Conclusion</td><td style="text-align: right;">18</td></tr>
+                <tr><td>10</td><td>References</td><td style="text-align: right;">19</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BODY CHAPTERS -->
+    <div class="report-page page-break">
+        <h2 class="sec-heading">1. ABSTRACT</h2>
+        <p style="text-align: justify; line-height: 1.8;">
+            Food wastage and hunger are global issues that sit on opposite ends of humanity’s food cycle, yet they coexist in an alarming way. While some countries discard millions of tons of edible food every year, others continue to struggle with high hunger levels and malnutrition. This project attempts to bring both realities onto the same canvas by analyzing their relationship through interactive dashboards built using Power BI and Tableau. Two Kaggle datasets—one containing Global Hunger Index (GHI) scores and the other representing global food wastage statistics—were cleaned, transformed, and visually explored. The dashboards present trends, country-wise comparisons, economic losses, and geographical distributions. By transforming raw datasets into meaningful visual insights, this project highlights the imbalance between food production, consumption, and waste, and emphasizes the importance of efficient global food distribution.
+        </p>
+
+        <h2 class="sec-heading">2. INTRODUCTION</h2>
+        <p style="text-align: justify; line-height: 1.8;">
+            The contrast between food surplus and food scarcity has remained one of the most contradictory global challenges. On one side of the world, supermarkets, hotels, and households discard vast amounts of food daily. On the other side, millions experience chronic hunger, nutritional deficiencies, and food insecurity. This gap raises a fundamental question: “Is the world truly short of food, or is it inefficiently utilized?”
+        </p>
+        <p style="text-align: justify; line-height: 1.8;">
+            This project focuses on studying the relationship between the Global Hunger Index and worldwide food wastage levels. By combining data analytics and visualization tools, the goal is to understand global patterns, compare country-wise statistics, and observe whether food wastage trends align with hunger severity. Power BI and Tableau were chosen because they provide strong capabilities for interactive visual analytics, making it easier to compare multi-dimensional data. The study helps build awareness about global food inequality and encourages the idea of sustainable consumption.
+        </p>
+    </div>
+
+</body>
+</html>
