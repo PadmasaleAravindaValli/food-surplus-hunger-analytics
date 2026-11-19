@@ -33,10 +33,32 @@ This project investigates the paradox of global food surplus and hunger coexiste
 
 ---
 
+## 📊 Dashboard Previews
+
+### 1. Overview & Donut Chart (Hunger Index vs Economic Loss & Waste Distribution)
+![Dashboard 1: Top 10 Hunger & Donut Distribution](dashboard1.png)
+
+### 2. Map Visualization over Countries
+![Map Visualization over Countries](map-visualization.png)
+
+### 3. Food Wastage vs Hunger Index (Trends & Correlation)
+![Food Wastage vs Hunger Index Analysis](total-analysis.png)
+
+---
+
 ## 📂 Repository File Structure
 
 ```
-powerbi MIne/
+food-surplus-hunger-analytics/
+│
+├── Food_Wastage_vs_Hunger_Dashboard.pbix      # Main Power BI Desktop file (.pbix)
+├── Food_Wastage_vs_Hunger.pbip                # Power BI Developer Project (.pbip)
+├── Food_Wastage_vs_Hunger.Report/             # Power BI visual layout definition
+├── Food_Wastage_vs_Hunger.SemanticModel/      # Power BI semantic tabular data model
+│
+├── dashboard1.png                             # Page 1 Screenshot
+├── map-visualization.png                      # Page 2 Screenshot
+├── total-analysis.png                         # Page 3 Screenshot
 │
 ├── index.html                                 # Standalone interactive dashboard web application (One-click launch!)
 │
@@ -51,6 +73,7 @@ powerbi MIne/
 │   └── tableau_hunger_entity_2021.csv         # Tableau hunger entity GHI scores (2021)
 │
 ├── power_bi/                                  # Power BI Assets & Config
+│   ├── Food_Wastage_vs_Hunger_Dashboard.pbix  # Backup PBIX file
 │   ├── PowerQuery_Cleaning_Script.m           # Production M-code for Advanced Editor
 │   ├── DAX_Measures.dax                       # Complete DAX formulas (KPIs, Ratios, Ranks)
 │   ├── PowerBI_Theme_Exact.json               # Custom Power BI JSON theme with exact colors
@@ -74,8 +97,12 @@ powerbi MIne/
 
 ## 🚀 How to Run & View the Project
 
-### 1. Instant Interactive Dashboard (Web Browser)
-- Simply double-click **`index.html`** in this directory to open it in Chrome, Edge, or Firefox.
+### 1. Power BI Desktop File (`.pbix`)
+- Open **`Food_Wastage_vs_Hunger_Dashboard.pbix`** directly in **Power BI Desktop**.
+- Both the binary `.pbix` and the modern version-controlled developer format (`Food_Wastage_vs_Hunger.pbip`) are included in this repository.
+
+### 2. Instant Interactive Dashboard (Web Browser)
+- Double-click **`index.html`** in this directory to open it in Chrome, Edge, or Firefox.
 - **Features**:
   - **Power BI Mode**:
     - **Page 1**: Purple-themed Top 10 Hunger bar chart, `$1.37M` and `$17.80M` KPI cards, and Donut chart with exact 18 country percentages.
@@ -87,14 +114,6 @@ powerbi MIne/
     - **Dashboard 3**: Salmon-red world choropleth map.
   - **Dataset Viewer & CSV Exporter**:
     - Inspect clean tabular data and click **Download CSV Data**.
-
-### 2. Loading into Power BI Desktop
-1. Open **Power BI Desktop**.
-2. Click **Get Data** -> **Text/CSV** -> Select `data/cleaned_merged_food_hunger_dataset.csv`.
-3. Open **Power Query Editor**, click **Advanced Editor**, and paste the code from `power_bi/PowerQuery_Cleaning_Script.m`.
-4. Click **Close & Apply**.
-5. Go to **View** -> **Themes** -> **Browse for themes** -> Select `power_bi/PowerBI_Theme_Exact.json`.
-6. Follow `power_bi/PowerBI_Dashboard_Guide.md` to configure the visuals on Pages 1, 2, and 3.
 
 ### 3. Loading into Tableau Desktop / Tableau Public
 1. Open **Tableau Desktop / Tableau Public**.
